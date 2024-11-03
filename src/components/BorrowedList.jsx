@@ -1,11 +1,11 @@
 // src/components/BorrowedList.js
 import React, {useEffect, useState} from 'react';
 import BookCard from './BookCard';
-import {borrowBook, getAllBooks, getUserBooks, returnBook} from '../services/BookService';
-import {Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField} from "@mui/material";
+import {getUserBooks, returnBook} from '../services/BookService';
+import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField} from "@mui/material";
 import {Box} from "@mui/system";
 
-const BorrowedList = ({existingBooks, onBorrow}) => {
+const BorrowedList = ({existingBooks, onBorrow, updateBooksQuantity}) => {
     const [borrowedBooks, setBorrowedBooks] = useState([]);
     const [name, setName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -14,6 +14,7 @@ const BorrowedList = ({existingBooks, onBorrow}) => {
     useEffect(() => {
         getBorrowedBooks();
     }, [userAction]);
+
     const getBorrowedBooks = () => {
         getUserBooks(name, phoneNumber)
             .then(response => setBorrowedBooks(response.data))
@@ -24,11 +25,12 @@ const BorrowedList = ({existingBooks, onBorrow}) => {
         console.log(bookId)
         returnBook(name, phoneNumber, bookId)
             .then(() => {
+                let quantity = existingBooks.find(x => x.id === bookId).copiesAvailable ?? 0;
                 setBorrowedBooks(borrowedBooks.filter(book => book.id !== bookId));
+                updateBooksQuantity(bookId, quantity + 1);
             })
-            .catch(error => alert('Unable to return book. ',error));
+            .catch(error => alert('Unable to return book. ', error));
     };
-
 
 
     const onActionChange = e => {
@@ -62,20 +64,13 @@ const BorrowedList = ({existingBooks, onBorrow}) => {
                         <FormLabel component="legend">Select Action</FormLabel>
                         <RadioGroup row aria-label="action" name="action" value={userAction} onChange={onActionChange}>
                             <FormControlLabel value="borrow" control={<Radio color="primary"/>} label="Borrow"/>
-                            <FormControlLabel value="view" defaultChecked control={<Radio color="primary"/>}
-                                              label="View"/>
+                            <FormControlLabel value="return" defaultChecked control={<Radio color="primary"/>}
+                                              label="Return borrowed books"/>
                         </RadioGroup>
                     </FormControl>
-
-                    {userAction !== "" ?
-                        <div style={{textAlign: "center", fontWeight: "bold"}}>
-                            <Button variant="outlined" size="small" onClick={getBorrowedBooks}>
-                                <b> {userAction === "borrow" ? "CHECK BORROWED BOOKS" : "CHECK BOOKS TO RETURN"} </b>
-                            </Button>
-                        </div> : null}
                 </Stack>
             </Box>
-            {userAction === "view" &&
+            {userAction === "return" &&
                 <>
                     <h2>Borrowed Books</h2>
                     {borrowedBooks.length === 0 && <p>No books borrowed by the user</p>}
@@ -93,11 +88,14 @@ const BorrowedList = ({existingBooks, onBorrow}) => {
             {userAction === "borrow" &&
                 <>
                     <h2>Book to Borrow</h2>
-                    {existingBooks.map(book => (
+                    {existingBooks.filter(x => x.copiesAvailable > 0).map(book => (
                         <BookCard
                             key={book.id}
                             book={book}
-                            onBorrow={() => onBorrow(name,phoneNumber,book.id)}
+                            onBorrow={() => {
+                                console.log(`name=${name},phoneNumber=${phoneNumber},book.id ${book.id}`)
+                                onBorrow(name, phoneNumber, book.id)
+                            }}
                             isBorrowed={true}
                             buttonAction={"Borrow"}
                         />

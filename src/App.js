@@ -1,12 +1,11 @@
-// import Register from "./components/Register";
-import Main from "./pages/Main";
+import Library from "./pages/Library";
 
 
 
 function App() {
     return (
         <div className="App">
-            <Main/>
+            <Library/>
         </div>
     );
 }
