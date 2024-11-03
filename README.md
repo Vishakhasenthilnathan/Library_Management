@@ -1,8 +1,17 @@
+
+**USERS to TEST the app**
+</br>
+``1. username: "Emalia Ferran", phoneNumber: "841-455-7100"
+2. username: "Jared Kester", phoneNumber: "427-634-5895"
+3. username: "Murdock Haysar", phoneNumber: "421-399-1404"``
+</br>
+
+****RENDER URL ** - https://library-management-jw2y.vercel.app/**
+
 ![img.png](img.png)
 ![img_1.png](img_1.png)
+![LibraryManagement.gif](LibraryManagement.gif)
 
-
-![LibraryManagement Video](LibraryManagement.mp4)
 </br>
 **Tech Stack : React**
 </br>
@@ -24,3 +33,4 @@
 2. Creation of user and books, adding books to library
 3. Validations
 4. Exception handling
+
