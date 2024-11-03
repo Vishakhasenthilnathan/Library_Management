@@ -1,4 +1,3 @@
-// src/components/BookCard.js
 import React from 'react';
 import {Button, Card, CardContent, Typography} from "@mui/material";
 
@@ -10,7 +9,7 @@ const BookCard = ({book, buttonAction, onReturn, onBorrow}) => {
                     {book.title}
                 </Typography>
                 <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                    Genre - {book.genre}
+                    Language - {book.language}
                 </Typography>
                 <Typography variant="body2" sx={{color: 'text.secondary'}}>
                     Author - {book.author}
