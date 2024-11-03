@@ -1,7 +1,9 @@
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 
-[gif](LibraryManagement.gif)
+
+![LibraryManagement Video](LibraryManagement.mp4)
+</br>
 **Tech Stack : React**
 </br>
 
